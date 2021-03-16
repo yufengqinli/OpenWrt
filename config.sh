@@ -74,16 +74,16 @@ EOF
 # 常用LuCI插件选择:
 cat >> .config <<EOF
 # 下载软件 arir2,bt,pcs
-CONFIG_PACKAGE_luci-app-aria2=n
+CONFIG_PACKAGE_luci-app-aria2=y
 CONFIG_PACKAGE_ariang=n
 CONFIG_PACKAGE_luci-app-amule=n
-CONFIG_PACKAGE_luci-app-qbittorrent=n
-CONFIG_PACKAGE_luci-app-transmission=n
-CONFIG_PACKAGE_luci-app-baidupcs-web=n
+CONFIG_PACKAGE_luci-app-qbittorrent=y
+CONFIG_PACKAGE_luci-app-transmission=y
+CONFIG_PACKAGE_luci-app-baidupcs-web=y
 # 内网穿透
 CONFIG_PACKAGE_luci-app-frpc=n
 # 网络共享
-CONFIG_PACKAGE_autosamba=n
+CONFIG_PACKAGE_autosamba=y
 CONFIG_PACKAGE_luci-app-samba=n
 CONFIG_PACKAGE_samba36-server=n
 CONFIG_PACKAGE_luci-app-cifsd=y
@@ -92,14 +92,14 @@ CONFIG_PACKAGE_luci-app-filetransfer=y
 CONFIG_PACKAGE_luci-app-filebrowser=y
 # 广告过滤
 CONFIG_PACKAGE_luci-app-koolproxyR=n
-CONFIG_PACKAGE_luci-app-adbyby-plus=n
-CONFIG_PACKAGE_luci-app-adguardhome=n
+CONFIG_PACKAGE_luci-app-adbyby-plus=y
+CONFIG_PACKAGE_luci-app-adguardhome=y
 CONFIG_PACKAGE_luci-app-godproxy=n
 CONFIG_PACKAGE_luci-app-dnsfilter=n
 # 网易云
-CONFIG_PACKAGE_luci-app-unblockmusic=n
-CONFIG_UnblockNeteaseMusic_Go=n
-CONFIG_UnblockNeteaseMusic_NodeJS=n
+CONFIG_PACKAGE_luci-app-unblockmusic=y
+CONFIG_UnblockNeteaseMusic_Go=y
+CONFIG_UnblockNeteaseMusic_NodeJS=y
 # vpn
 CONFIG_PACKAGE_luci-app-ssr-plus=y
 CONFIG_PACKAGE_luci-app-openclash=y
@@ -107,23 +107,23 @@ CONFIG_PACKAGE_luci-app-bypass=y
 #CONFIG_PACKAGE_luci-app-vssr=n
 #CONFIG_PACKAGE_luci-app-vssr-plus=y
 CONFIG_PACKAGE_luci-app-passwall=y
-CONFIG_PACKAGE_luci-app-webadmin=n
-CONFIG_PACKAGE_luci-app-wrtbwmon=n
+CONFIG_PACKAGE_luci-app-webadmin=y
+CONFIG_PACKAGE_luci-app-wrtbwmon=y
 # 其他软件(京东签到,UU,smartdns,netdata,微信)
-CONFIG_PACKAGE_luci-app-jd-dailybonus=n
-CONFIG_PACKAGE_luci-app-uugamebooster=n
-CONFIG_PACKAGE_luci-app-smartdns=n
+CONFIG_PACKAGE_luci-app-jd-dailybonus=y
+CONFIG_PACKAGE_luci-app-uugamebooster=y
+CONFIG_PACKAGE_luci-app-smartdns=y
 CONFIG_PACKAGE_luci-app-netdata=y
 CONFIG_PACKAGE_luci-app-serverchan=y
 EOF
 # 取消默认插件
 cat >> .config <<EOF
 CONFIG_PACKAGE_luci-app-music-remote-center=n
-CONFIG_PACKAGE_luci-app-airplay2=n
+CONFIG_PACKAGE_luci-app-airplay2=y
 CONFIG_PACKAGE_luci-app-vsftpd=n
-CONFIG_PACKAGE_luci-app-ddns=n
+CONFIG_PACKAGE_luci-app-ddns=y
 CONFIG_PACKAGE_luci-app-xlnetacc=n
-CONFIG_PACKAGE_luci-app-wol=n
+CONFIG_PACKAGE_luci-app-wol=y
 CONFIG_PACKAGE_luci-app-upnp=n
 CONFIG_PACKAGE_luci-app-sfe=n
 CONFIG_PACKAGE_luci-app-accesscontrol=n
@@ -133,14 +133,14 @@ CONFIG_PACKAGE_luci-app-zerotier=y
 CONFIG_PACKAGE_luci-app-hd-idle=y
 CONFIG_PACKAGE_luci-app-samba4=n
 # 挂载远程共享
-CONFIG_PACKAGE_luci-app-cifs-mount=n
-CONFIG_PACKAGE_luci-app-openvpn-server=n
-CONFIG_PACKAGE_luci-app-ipsec-vpnd=n
+CONFIG_PACKAGE_luci-app-cifs-mount=y
+CONFIG_PACKAGE_luci-app-openvpn-server=y
+CONFIG_PACKAGE_luci-app-ipsec-vpnd=y
 EOF
 # LuCI主题:
 cat >> .config <<EOF
 CONFIG_PACKAGE_luci-theme-atmaterial=y
-CONFIG_PACKAGE_luci-theme-argon=n
+CONFIG_PACKAGE_luci-theme-argon=y
 EOF
 # 常用软件包:
 cat >> .config <<EOF
