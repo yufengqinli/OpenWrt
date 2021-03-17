@@ -105,7 +105,7 @@ CONFIG_PACKAGE_luci-app-ssr-plus=y
 CONFIG_PACKAGE_luci-app-openclash=y
 CONFIG_PACKAGE_luci-app-bypass=y
 #CONFIG_PACKAGE_luci-app-vssr=n
-#CONFIG_PACKAGE_luci-app-vssr-plus=y
+#CONFIG_PACKAGE_luci-app-vssr-plus=n
 CONFIG_PACKAGE_luci-app-passwall=y
 CONFIG_PACKAGE_luci-app-webadmin=y
 CONFIG_PACKAGE_luci-app-wrtbwmon=y
@@ -120,18 +120,18 @@ EOF
 cat >> .config <<EOF
 CONFIG_PACKAGE_luci-app-music-remote-center=n
 CONFIG_PACKAGE_luci-app-airplay2=y
-CONFIG_PACKAGE_luci-app-vsftpd=n
+CONFIG_PACKAGE_luci-app-vsftpd=y
 CONFIG_PACKAGE_luci-app-ddns=y
-CONFIG_PACKAGE_luci-app-xlnetacc=n
+CONFIG_PACKAGE_luci-app-xlnetacc=y
 CONFIG_PACKAGE_luci-app-wol=y
 CONFIG_PACKAGE_luci-app-upnp=y
-CONFIG_PACKAGE_luci-app-sfe=n
-CONFIG_PACKAGE_luci-app-accesscontrol=n
+CONFIG_PACKAGE_luci-app-sfe=y
+CONFIG_PACKAGE_luci-app-accesscontrol=y
 # zerotier内网穿透,使用VPN
 CONFIG_PACKAGE_luci-app-zerotier=y
 # 比Samba3无优势(硬盘休眠)
 CONFIG_PACKAGE_luci-app-hd-idle=y
-CONFIG_PACKAGE_luci-app-samba4=n
+CONFIG_PACKAGE_luci-app-samba4=y
 # 挂载远程共享
 CONFIG_PACKAGE_luci-app-cifs-mount=y
 CONFIG_PACKAGE_luci-app-openvpn-server=y
