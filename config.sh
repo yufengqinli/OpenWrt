@@ -126,12 +126,12 @@ CONFIG_PACKAGE_luci-app-xlnetacc=y
 CONFIG_PACKAGE_luci-app-wol=y
 CONFIG_PACKAGE_luci-app-upnp=y
 CONFIG_PACKAGE_luci-app-sfe=y
-CONFIG_PACKAGE_luci-app-accesscontrol=y
+CONFIG_PACKAGE_luci-app-accesscontrol=n
 # zerotier内网穿透,使用VPN
 CONFIG_PACKAGE_luci-app-zerotier=y
 # 比Samba3无优势(硬盘休眠)
 CONFIG_PACKAGE_luci-app-hd-idle=y
-CONFIG_PACKAGE_luci-app-samba4=y
+CONFIG_PACKAGE_luci-app-samba4=n
 # 挂载远程共享
 CONFIG_PACKAGE_luci-app-cifs-mount=y
 CONFIG_PACKAGE_luci-app-openvpn-server=y
