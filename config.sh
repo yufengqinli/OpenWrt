@@ -81,12 +81,12 @@ CONFIG_PACKAGE_luci-app-qbittorrent=y
 CONFIG_PACKAGE_luci-app-transmission=y
 CONFIG_PACKAGE_luci-app-baidupcs-web=y
 # 内网穿透
-CONFIG_PACKAGE_luci-app-frpc=n
+CONFIG_PACKAGE_luci-app-frpc=y
 # 网络共享
 CONFIG_PACKAGE_autosamba=y
 CONFIG_PACKAGE_luci-app-samba=n
 CONFIG_PACKAGE_samba36-server=n
-CONFIG_PACKAGE_luci-app-cifsd=y
+CONFIG_PACKAGE_luci-app-cifsd=n
 # 文件管理
 CONFIG_PACKAGE_luci-app-filetransfer=y
 CONFIG_PACKAGE_luci-app-filebrowser=y
@@ -124,7 +124,7 @@ CONFIG_PACKAGE_luci-app-vsftpd=n
 CONFIG_PACKAGE_luci-app-ddns=y
 CONFIG_PACKAGE_luci-app-xlnetacc=n
 CONFIG_PACKAGE_luci-app-wol=y
-CONFIG_PACKAGE_luci-app-upnp=n
+CONFIG_PACKAGE_luci-app-upnp=y
 CONFIG_PACKAGE_luci-app-sfe=n
 CONFIG_PACKAGE_luci-app-accesscontrol=n
 # zerotier内网穿透,使用VPN
