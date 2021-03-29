@@ -24,8 +24,8 @@ P3TERX云编译：[https://github.com/P3TERX/Actions-OpenWrt](https://github.com
 固件说明：
 lean源码版本，内核为5.4（ipv4）版
 
-自动每7天更新一次，手动不定时更新
+手动不定时更新。
 
 ip：10.10.10.251 密码：psssword
 ## 其他
-联系：[Tg频道订阅](https://t.me/six_cloud)
+
