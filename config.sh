@@ -125,7 +125,7 @@ CONFIG_PACKAGE_luci-app-ddns=y
 CONFIG_PACKAGE_luci-app-xlnetacc=y
 CONFIG_PACKAGE_luci-app-wol=y
 CONFIG_PACKAGE_luci-app-upnp=y
-CONFIG_PACKAGE_luci-app-sfe=y
+CONFIG_PACKAGE_luci-app-sfe=n
 CONFIG_PACKAGE_luci-app-accesscontrol=y
 # zerotier内网穿透,使用VPN
 CONFIG_PACKAGE_luci-app-zerotier=y
