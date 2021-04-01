@@ -74,11 +74,11 @@ EOF
 # 常用LuCI插件选择:
 cat >> .config <<EOF
 # 下载软件 arir2,bt,pcs
-CONFIG_PACKAGE_luci-app-aria2=y
+CONFIG_PACKAGE_luci-app-aria2=n
 CONFIG_PACKAGE_ariang=n
 CONFIG_PACKAGE_luci-app-amule=n
 CONFIG_PACKAGE_luci-app-qbittorrent=y
-CONFIG_PACKAGE_luci-app-transmission=y
+CONFIG_PACKAGE_luci-app-transmission=n
 CONFIG_PACKAGE_luci-app-baidupcs-web=y
 # 内网穿透
 CONFIG_PACKAGE_luci-app-frpc=y
@@ -93,7 +93,7 @@ CONFIG_PACKAGE_luci-app-filebrowser=y
 # 广告过滤
 CONFIG_PACKAGE_luci-app-koolproxyR=n
 CONFIG_PACKAGE_luci-app-adbyby-plus=y
-CONFIG_PACKAGE_luci-app-adguardhome=y
+CONFIG_PACKAGE_luci-app-adguardhome=n
 CONFIG_PACKAGE_luci-app-godproxy=n
 CONFIG_PACKAGE_luci-app-dnsfilter=n
 # 网易云
