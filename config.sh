@@ -112,7 +112,7 @@ CONFIG_PACKAGE_luci-app-wrtbwmon=y
 # 其他软件(京东签到,UU,smartdns,netdata,微信)
 CONFIG_PACKAGE_luci-app-jd-dailybonus=y
 CONFIG_PACKAGE_luci-app-uugamebooster=y
-CONFIG_PACKAGE_luci-app-smartdns=y
+CONFIG_PACKAGE_luci-app-smartdns=n
 CONFIG_PACKAGE_luci-app-netdata=y
 CONFIG_PACKAGE_luci-app-serverchan=y
 EOF
@@ -166,8 +166,8 @@ EOF
 
 # Image Options 分区设置
 cat >> .config <<EOF
-CONFIG_TARGET_KERNEL_PARTSIZE=50
-CONFIG_TARGET_ROOTFS_PARTSIZE=500
+CONFIG_TARGET_KERNEL_PARTSIZE=30
+CONFIG_TARGET_ROOTFS_PARTSIZE=300
 EOF
 # 
 # ========================固件定制部分结束========================
