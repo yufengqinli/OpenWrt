@@ -101,9 +101,9 @@ CONFIG_PACKAGE_luci-app-unblockmusic=y
 CONFIG_UnblockNeteaseMusic_Go=y
 CONFIG_UnblockNeteaseMusic_NodeJS=y
 # vpn
-CONFIG_PACKAGE_luci-app-ssr-plus=y
-CONFIG_PACKAGE_luci-app-openclash=y
-CONFIG_PACKAGE_luci-app-bypass=n
+CONFIG_PACKAGE_luci-app-ssr-plus=n
+CONFIG_PACKAGE_luci-app-openclash=n
+CONFIG_PACKAGE_luci-app-bypass=y
 #CONFIG_PACKAGE_luci-app-vssr=n
 #CONFIG_PACKAGE_luci-app-vssr-plus=n
 CONFIG_PACKAGE_luci-app-passwall=y
@@ -166,8 +166,8 @@ EOF
 
 # Image Options 分区设置
 cat >> .config <<EOF
-CONFIG_TARGET_KERNEL_PARTSIZE=30
-CONFIG_TARGET_ROOTFS_PARTSIZE=300
+CONFIG_TARGET_KERNEL_PARTSIZE=50
+CONFIG_TARGET_ROOTFS_PARTSIZE=500
 EOF
 # 
 # ========================固件定制部分结束========================
