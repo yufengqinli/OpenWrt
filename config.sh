@@ -79,7 +79,7 @@ CONFIG_PACKAGE_ariang=n
 CONFIG_PACKAGE_luci-app-amule=n
 CONFIG_PACKAGE_luci-app-qbittorrent=y
 CONFIG_PACKAGE_luci-app-transmission=n
-CONFIG_PACKAGE_luci-app-baidupcs-web=y
+CONFIG_PACKAGE_luci-app-baidupcs-web=n
 # 内网穿透
 CONFIG_PACKAGE_luci-app-frpc=y
 # 网络共享
@@ -92,8 +92,8 @@ CONFIG_PACKAGE_luci-app-filetransfer=y
 CONFIG_PACKAGE_luci-app-filebrowser=y
 # 广告过滤
 CONFIG_PACKAGE_luci-app-koolproxyR=n
-CONFIG_PACKAGE_luci-app-adbyby-plus=y
-CONFIG_PACKAGE_luci-app-adguardhome=n
+CONFIG_PACKAGE_luci-app-adbyby-plus=n
+CONFIG_PACKAGE_luci-app-adguardhome=y
 CONFIG_PACKAGE_luci-app-godproxy=n
 CONFIG_PACKAGE_luci-app-dnsfilter=n
 # 网易云
