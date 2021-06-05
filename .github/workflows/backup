@@ -1,0 +1,265 @@
+#=================================================
+# https://github.com/P3TERX/Actions-OpenWrt
+# Description: Build OpenWrt using GitHub Actions
+# Lisence: MIT
+# Author: P3TERX
+# Blog: https://p3terx.com
+#=================================================
+
+name: yufeng openwrt
+
+on:
+  #release:
+    #types: published
+  push:
+    branches:
+     - master
+  schedule:
+     - cron: 0 16 * * 6
+  watch:
+    types: started
+
+env:
+  ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+  REPO_URL: https://github.com/coolsnowwolf/lede
+  REPO_BRANCH: master
+  FEEDS_CONF: feeds.conf.default
+  CONFIG_FILE: .config
+  SOFT_SH: soft.sh
+  DIY_SH: diy.sh
+  OTHER_SH: other.sh
+  CONFIG_SH: config.sh
+  SSH_ACTIONS: true
+  UPLOAD_BIN_DIR: false
+  UPLOAD_FIRMWARE: true
+  UPLOAD_COWTRANSFER: true
+  UPLOAD_WETRANSFER: true
+  UPLOAD_FIRMWARE_FOR_RELEASE: true
+  REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+  SCKEY: ${{ secrets.SCKEY }}
+  TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+  TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}  
+  PPPOE_USERNAME: ${{ secrets.PPPOE_USERNAME }}
+  PPPOE_PASSWD: ${{ secrets.PPPOE_PASSWD }}
+  TZ: Asia/Shanghai
+  GITHUB_RELEASE: https://github.com/MCydia/OpenWrt/releases
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: github.event.repository.owner.id == github.event.sender.id
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@main
+
+    - name: 初始化环境
+      env:
+        DEBIAN_FRONTEND: noninteractive
+      run: |
+        sudo rm -rf /usr/share/dotnet /etc/mysql /etc/php /etc/apt/sources.list.d
+        sudo -E apt-get update
+        sudo -E apt-get -y install build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev libz-dev patch python3.5 python2.7 unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs git-core gcc-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint device-tree-compiler g++-multilib antlr3 gperf wget swig rsync
+        sudo -E apt-get -y autoremove --purge
+        sudo -E apt-get clean
+        sudo timedatectl set-timezone "$TZ"
+        
+    - name: 设置环境
+      id: date
+      run: |
+        echo "::set-env name=date::$(date +'%m/%d_%Y_%H/%M')"
+        echo "::set-env name=date2::$(date +'%m/%d %Y')"
+        echo "::set-env name=date3::$(date +'%m.%d')"
+        Emoji=("🎉" "🤞" "✨" "🎁" "🎈" "🎄" "🎨" "💋" "🍓" "🍕" "🍉" "💐" "🌴" "🚀" "🛸" "🗽" "⛅" "🌈" "🔥" "⛄" "🐶" "🏅" "🦄" "🐤")
+        RANDOM=$$$(date +%s)
+        rand=$[$RANDOM % ${#Emoji[@]}]
+        echo "::set-env name=EMOJI::${Emoji[$rand]}"
+        
+    - name: 克隆代码
+      run: git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
+
+    # 界面化配置,等待SSH连接
+    # - name: 等待SSH连接
+    #   uses: P3TERX/debugger-action@main
+    #   if: env.SSH_ACTIONS == 'true'
+
+    - name: 电报信息
+      run: |
+        curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=🎉 主人您要编译的[ OpenWrt_firmware ]固件正在努力耕耘中,请耐心等待...... 😋" "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage"
+
+    - name: 执行 soft.sh
+      run: |
+        pwd
+        chmod +x $SOFT_SH
+        cd openwrt
+        ../$SOFT_SH
+        
+    - name: 更新 feeds
+      run: cd openwrt && ./scripts/feeds update -a
+
+    - name: 安装 feeds
+      run: cd openwrt && ./scripts/feeds install -a
+
+    - name: 执行 diy.sh
+      run: |
+        pwd
+        [ -e files ] && mv files openwrt/files
+        [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
+        pwd
+        chmod +x $DIY_SH
+        cd openwrt
+        sed -i 's/^[ \t]*//g' ./.config
+        make defconfig
+        ../$DIY_SH
+        
+    - name: 执行 config.sh
+      run: |
+        pwd
+        chmod +x $CONFIG_SH
+        ./$CONFIG_SH
+    
+    - name: 执行 other.sh
+      run: |
+        pwd
+        chmod +x $OTHER_SH
+        ./$OTHER_SH
+        
+    # 界面化配置,等待SSH连接
+    # - name: SSH connection to Actions
+    #   uses: P3TERX/debugger-action@main
+    #   if: env.SSH_ACTIONS == 'true'
+    
+    - name: 下载安装包
+      id: package
+      run: |
+        pwd
+        cd openwrt
+        make download -j8
+        find ./dl/ -size -1024c -exec rm -f {} \;
+        
+    - name: 开始编译        
+      id: compile
+      run: |
+        pwd
+        cd openwrt
+        echo -e "$(nproc) thread compile"
+        make -j$(nproc) V=s
+        echo "::set-output name=status::success"
+        
+    - name: 上传 bin文件
+      uses: actions/upload-artifact@v1
+      if: steps.compile.outputs.status == 'success' && env.UPLOAD_BIN_DIR == 'true'
+      with:
+        name: OpenWrt_directory
+        path: openwrt/bin
+        
+    - name: 整理 Firmware
+      id: organize
+      if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
+      run: |
+        pwd
+        cd openwrt/bin/targets/*/*
+        rm -rf packages
+        echo "::set-env name=FIRMWARE::$PWD"
+        echo "::set-output name=status::success"
+        
+    - name: 上传到 GitHub
+      uses: actions/upload-artifact@master
+      if: steps.organize.outputs.status == 'success' && !cancelled()
+      with:
+        name: OpenWrt_firmware
+        path: ${{ env.FIRMWARE }}
+
+    - name: 上传到 奶牛快传
+      if: steps.organize.outputs.status == 'success' && env.UPLOAD_COWTRANSFER == 'true' && !cancelled()
+      run: |
+        pwd
+        curl -fsSL git.io/file-transfer | sh
+        cowurl=$(./transfer cow --block 2621440 -s --no-progress ${FIRMWARE})
+        cowurl=$(echo $cowurl | grep -o -E "https[^ ]*")
+        echo "::set-env name=COWURL::$cowurl"
+        echo "::warning file=cowtransfer.com::$cowurl"
+        
+    - name: 上传到 WeTransfer
+      if: steps.organize.outputs.status == 'success' && env.UPLOAD_WETRANSFER == 'true' && !cancelled()
+      run: |
+        pwd
+        curl -fsSL git.io/file-transfer | sh
+        wetrans=$(./transfer wet -s -p 16 --no-progress ${FIRMWARE})
+        wetrans=$(echo $wetrans | grep -o -E "https[^ ]*")
+        echo "::set-env name=WETRANS::$wetrans"
+        echo "::warning file=wetransfer.com::$wetrans"
+    
+    - name: 创建 Release
+      id: create_release
+      uses: actions/create-release@main
+      continue-on-error: true
+      if: env.REPO_TOKEN && env.UPLOAD_FIRMWARE_FOR_RELEASE == 'true'
+      env:
+        GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+      with:
+        tag_name: ${{ env.date3 }}
+        release_name: Lede_x86_64 ${{ env.date2 }} ${{ env.EMOJI }}
+        body: |
+            ☆  源码 : ${{ env.REPO_URL }}
+            ☆  分支 : ${{ env.REPO_BRANCH }}
+            ☆  感谢源码作者[ ${{ env.ZUOZHE }}大雕 ]无私分享！
+            
+            🎉 [ OpenWrt_generic ]固件下载 ✨
+            -
+            💐 奶牛快传(国内高速🚀下载)： ${{ env.COWURL }}
+            
+            ⛄ WeTransfer(国外高速🚀下载)： ${{ env.WETRANS }}
+            
+            🌴 链接有效期为7天，无需注册直接下载 🐤
+            
+        draft: false
+        prerelease: false     
+
+    - name: 上传到 Release
+      uses: csexton/release-asset-action@master
+      continue-on-error: true
+      if: env.REPO_TOKEN && env.UPLOAD_FIRMWARE_FOR_RELEASE == 'true'
+      with:
+        pattern: "${{ env.FIRMWARE }}/*"
+        github-token: ${{ secrets.REPO_TOKEN }}
+        release-url: ${{ steps.create_release.outputs.upload_url }}
+        
+    - name: 删除旧的 Releases
+      uses: dev-drprasad/delete-older-releases@master
+      if: env.REPO_TOKEN == 'true' && !cancelled()
+      with:
+        keep_latest: 9
+        delete_tags: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+        
+    - name: 电报机器人
+      run: |
+        curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=我亲爱的✨主人✨您要编译的[ OpenWrt-X86-64 ]固件顺利编译完成了！
+      
+          完成时间：${{ env.date }}
+      
+          发布地址：${{ env.GITHUB_RELEASE }}
+      
+          奶牛快传：${{ env.COWURL }}
+      
+          WeTransfer：${{ env.WETRANS }}
+      
+          祝小主人见人爱，💐花见花开，车见车载，天天好心情🎈！！！" "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage" 
+      
+    - name: 微信报告
+      uses: emon100/Action-Serverchan@master
+      if: steps.organize.outputs.status == 'success' && !cancelled()
+      with:
+        SCKEY: ${{ secrets.SCKEY }}
+        text: 恭喜主人[ OpenWrt-X86-64 ]固件编译成功！
+        desp: 我亲爱的主人您要编译的[ OpenWrt-X86-64 ]固件顺利编译完成了！
+              
+              完成时间：${{ env.date2 }}
+              
+              奶牛快传：${{ env.COWURL }}
+              
+              WeTransfer：${{ env.WETRANS }}
+              
+              祝小主人见人爱，花见花开，车见车载，天天好心情🎈！！！
