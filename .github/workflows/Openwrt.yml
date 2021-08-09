@@ -169,16 +169,6 @@ jobs:
       with:
         name: OpenWrt_firmware
         path: ${{ env.FIRMWARE }}
-
-    - name: 上传到 奶牛快传
-      if: steps.organize.outputs.status == 'success' && env.UPLOAD_COWTRANSFER == 'true' && !cancelled()
-      run: |
-        pwd
-        curl -fsSL git.io/file-transfer | sh
-        cowurl=$(./transfer cow --block 2621440 -s --no-progress ${FIRMWARE})
-        cowurl=$(echo $cowurl | grep -o -E "https[^ ]*")
-        echo "::set-env name=COWURL::$cowurl"
-        echo "::warning file=cowtransfer.com::$cowurl"
         
     - name: 创建 Release
       id: create_release
