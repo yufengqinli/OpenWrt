@@ -5,11 +5,11 @@
 #
 
 cat >$NETIP <<-EOF
-uci set network.lan.ipaddr='10.10.10.251'                                   # IPv4 地址(openwrt后台地址)
+uci set network.lan.ipaddr='10.10.10.51'                                   # IPv4 地址(openwrt后台地址)
 uci set network.lan.netmask='255.255.255.0'                                 # IPv4 子网掩码
-uci set network.lan.gateway='10.10.10.250'                                  # IPv4 网关
-uci set network.lan.broadcast='10.10.10.255'                                # IPv4 广播
-uci set network.lan.dns='10.10.10.253'                                      # DNS(多个DNS要用空格分开)
+uci set network.lan.gateway='10.10.10.1'                                  # IPv4 网关
+#uci set network.lan.broadcast='10.10.10.255'                                # IPv4 广播
+uci set network.lan.dns='10.10.10.21'                                      # DNS(多个DNS要用空格分开)
 uci set network.lan.delegate='0'                                            # 去掉LAN口使用内置的 IPv6 管理
 uci commit network                                                          # 不要删除跟注释,除非上面全部删除或注释掉了
 uci set dhcp.lan.ignore='1'                                                 # 关闭DHCP功能
@@ -17,14 +17,14 @@ uci commit dhcp                                                             # �
 uci set system.@system[0].hostname='OpenWrt'                                # 修改主机名称为OpenWrt
 EOF
 
-# 版本号里显示一个自己的名字（MCydia build $(TZ=UTC-8 date "+%Y.%m.%d") @ 这些都是后增加的）
+# 版本号里显示一个自己的名字（Yufeng build $(TZ=UTC-8 date "+%Y.%m.%d") @ 这些都是后增加的）
 sed -i "s/OpenWrt /${Author} Compiled in $(TZ=UTC-8 date "+%Y.%m.%d") @ OpenWrt /g" $ZZZ
 
 # 关闭IPv6 分配长度
 sed -i '/ip6assign/d' package/base-files/files/bin/config_generate
                                                 
-# 选择opentomcat为默认主题
-sed -i 's/luci-theme-bootstrap/luci-theme-opentomcat/g' feeds/luci/collections/luci/Makefile                    
+# 选择bootstrap为默认主题
+sed -i 's/luci-theme-bootstrap/luci-theme-bootstrap/g' feeds/luci/collections/luci/Makefile                    
 
 # 替换密码（要替换密码就不能设置密码为空）
 #sed -i 's/$1$V4UetPzk$CYXluq4wUazHjmCDBCqXF.:0/$1$PhflQnJ1$yamWfH5Mphs4hXV7UXWQ21:18725/g' $ZZZ          
@@ -58,7 +58,7 @@ sed -i 's/"网络存储"/"存储"/g' package/lean/luci-app-usb-printer/po/zh-cn/
 sed -i 's/"Web 管理"/"Web"/g' package/lean/luci-app-webadmin/po/zh-cn/webadmin.po
 sed -i 's/"管理权"/"改密码"/g' feeds/luci/modules/luci-base/po/zh-cn/base.po
 sed -i 's/"带宽监控"/"监视"/g' feeds/luci/applications/luci-app-nlbwmon/po/zh-cn/nlbwmon.po
-sed -i 's/"动态 DNS"/"Dynamic DNS"/g' feeds/luci/applications/luci-app-ddns/po/zh-cn/ddns.po
+#sed -i 's/"动态 DNS"/"Dynamic DNS"/g' feeds/luci/applications/luci-app-ddns/po/zh-cn/ddns.po
 sed -i 's/"解锁网易云灰色歌曲"/"NetEase music"/g' package/lean/luci-app-unblockmusic/po/zh-cn/unblockmusic.po
 sed -i 's/"Frp 内网穿透"/"Frp Intranet"/g' package/lean/luci-app-frpc/po/zh-cn/frp.po
 sed -i 's/"Argon 主题设置"/"Argon Settings"/g' feeds/luci/applications/luci-app-argon-config/po/zh-cn/argon-config.po
